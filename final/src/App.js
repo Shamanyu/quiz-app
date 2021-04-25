@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export default function App() {
 
-	const QUESTION_API = 'https://opentdb.com/api.php?amount=10&type=multiple';
+	const QUESTION_API = 'https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple';
 	const [questions, setquestions] = useState([]);
     const [isBusy, setBusy] = useState(true);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
