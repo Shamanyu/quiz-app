@@ -29,35 +29,35 @@ export default function App() {
         return txt.value;
     }
 
-	const transformRawQuestions = (rawQuestions) => {
-	    let transformedQuestions = [];
-        rawQuestions.results.forEach(function(item, index) {
-            console.log("Parsing...", item, index);
-            let question = {}
-            question.category = item.category;
-            question.questionText = decodeHtml(item.question);
-            question.answerOptions = [];
-            item.incorrect_answers.forEach(function(inner_item, inner_index) {
+    useEffect(() => {
+        const transformRawQuestions = (rawQuestions) => {
+            let transformedQuestions = [];
+            rawQuestions.results.forEach(function(item, index) {
+                console.log("Parsing...", item, index);
+                let question = {}
+                question.category = item.category;
+                question.questionText = decodeHtml(item.question);
+                question.answerOptions = [];
+                item.incorrect_answers.forEach(function(inner_item, inner_index) {
+                    question.answerOptions.push(
+                        {
+                            'answerText': decodeHtml(inner_item),
+                            'isCorrect': false,
+                        }
+                    )
+                });
                 question.answerOptions.push(
                     {
-                        'answerText': decodeHtml(inner_item),
-                        'isCorrect': false,
+                        'answerText': decodeHtml(item.correct_answer),
+                        'isCorrect': true,
                     }
-                )
+                );
+                question.answerOptions = question.answerOptions.sort(() => Math.random() - 0.5)
+                transformedQuestions.push(question);
             });
-            question.answerOptions.push(
-                {
-                    'answerText': decodeHtml(item.correct_answer),
-                    'isCorrect': true,
-                }
-            );
-            question.answerOptions = question.answerOptions.sort(() => Math.random() - 0.5)
-            transformedQuestions.push(question);
-        });
-        return transformedQuestions;
-    }
+            return transformedQuestions;
+        };
 
-    useEffect(() => {
         const fetchData = async () => {
             const result = await axios(
                 QUESTION_API
@@ -89,7 +89,10 @@ export default function App() {
                         </div>
                     </>
                 ) : (
-                    <div>Loading</div>
+                <div>
+                    <div>Hold tight, dear person.name.</div>
+                    <div>Gotcha, how would I know your name anyway?!</div>
+                </div>
                 )
 
             )}
