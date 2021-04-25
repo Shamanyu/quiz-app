@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import useDocumentTitle from '@rehooks/document-title';
 
 export default function App() {
 
@@ -67,6 +68,8 @@ export default function App() {
         };
         fetchData();
     }, []);
+
+    useDocumentTitle('Quiz scenes!');
 
     return (
         <div className='app'>
