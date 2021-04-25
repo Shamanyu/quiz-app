@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export default function App() {
 
-	const QUESTION_API = 'https://opentdb.com/api.php?amount=5&type=multiple';
+	const QUESTION_API = 'https://opentdb.com/api.php?amount=10&type=multiple';
 	const [questions, setquestions] = useState([]);
     const [isBusy, setBusy] = useState(true);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -23,25 +23,31 @@ export default function App() {
 		}
 	};
 
+    const decodeHtml = (html) => {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
+
 	const transformRawQuestions = (rawQuestions) => {
 	    let transformedQuestions = [];
         rawQuestions.results.forEach(function(item, index) {
             console.log("Parsing...", item, index);
             let question = {}
             question.category = item.category;
-            question.questionText = item.question;
+            question.questionText = decodeHtml(item.question);
             question.answerOptions = [];
             item.incorrect_answers.forEach(function(inner_item, inner_index) {
                 question.answerOptions.push(
                     {
-                        'answerText': inner_item,
+                        'answerText': decodeHtml(inner_item),
                         'isCorrect': false,
                     }
                 )
             });
             question.answerOptions.push(
                 {
-                    'answerText': item.correct_answer,
+                    'answerText': decodeHtml(item.correct_answer),
                     'isCorrect': true,
                 }
             );
